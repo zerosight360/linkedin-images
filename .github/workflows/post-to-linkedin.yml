@@ -22,6 +22,11 @@ on:
         description: 'Post ID to publish (e.g., company_1, personal_3)'
         required: true
         type: string
+      force:
+        description: 'Force post even if already posted'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   post:
@@ -53,9 +58,26 @@ jobs:
           fi
           
           echo "post_id=${POST_ID}" >> $GITHUB_OUTPUT
-          echo "Publishing post: ${POST_ID}"
+          echo "📝 Post ID: ${POST_ID}"
+      
+      - name: Check if already posted
+        id: check_posted
+        run: |
+          POST_ID="${{ steps.determine_post.outputs.post_id }}"
+          POSTED_FILE="posted/${POST_ID}.done"
+          
+          if [ -f "$POSTED_FILE" ] && [ "${{ github.event.inputs.force }}" != "true" ]; then
+            echo "⚠️ Post ${POST_ID} was already published on $(cat $POSTED_FILE)"
+            echo "   Use force=true to post again"
+            echo "already_posted=true" >> $GITHUB_OUTPUT
+          else
+            echo "✅ Post ${POST_ID} has not been published yet"
+            echo "already_posted=false" >> $GITHUB_OUTPUT
+          fi
       
       - name: Post to Buffer
+        if: steps.check_posted.outputs.already_posted == 'false'
+        id: post_buffer
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
         run: |
@@ -64,19 +86,20 @@ jobs:
           # Load post data from JSON file
           POST_DATA=$(cat posts/posts.json | jq -r ".posts[] | select(.id == \"${POST_ID}\")")
           
-          if [ -z "$POST_DATA" ]; then
-            echo "Error: Post ${POST_ID} not found in posts.json"
+          if [ -z "$POST_DATA" ] || [ "$POST_DATA" == "null" ]; then
+            echo "❌ Error: Post ${POST_ID} not found in posts.json"
             exit 1
           fi
           
           CHANNEL_ID=$(echo "$POST_DATA" | jq -r '.channel_id')
           TEXT=$(echo "$POST_DATA" | jq -r '.text')
           IMAGE=$(echo "$POST_DATA" | jq -r '.image')
+          TOPIC=$(echo "$POST_DATA" | jq -r '.topic')
           IMAGE_URL="https://raw.githubusercontent.com/zerosight360/linkedin-images/master/${IMAGE}"
           
-          echo "Channel: $CHANNEL_ID"
-          echo "Image: $IMAGE_URL"
-          echo "Text preview: ${TEXT:0:100}..."
+          echo "📌 Topic: $TOPIC"
+          echo "📷 Image: $IMAGE_URL"
+          echo "📝 Text preview: ${TEXT:0:100}..."
           
           # Post to Buffer using shareNow (immediate publish)
           RESPONSE=$(curl -s -X POST https://api.buffer.com/graphql \
@@ -95,18 +118,58 @@ jobs:
               }
             }")
           
-          echo "Buffer API Response:"
+          echo "📡 Buffer API Response:"
           echo "$RESPONSE" | jq .
           
           # Check for errors
           if echo "$RESPONSE" | jq -e '.errors' > /dev/null 2>&1; then
-            echo "Error posting to Buffer"
+            echo "❌ Error posting to Buffer"
             exit 1
           fi
           
           if echo "$RESPONSE" | jq -e '.data.createPost.message' > /dev/null 2>&1; then
-            echo "Buffer error: $(echo "$RESPONSE" | jq -r '.data.createPost.message')"
+            ERROR_MSG=$(echo "$RESPONSE" | jq -r '.data.createPost.message')
+            echo "❌ Buffer error: $ERROR_MSG"
             exit 1
           fi
           
-          echo "✅ Successfully posted to LinkedIn!"
+          # Extract post ID from response
+          BUFFER_POST_ID=$(echo "$RESPONSE" | jq -r '.data.createPost.post.id // empty')
+          echo "buffer_post_id=${BUFFER_POST_ID}" >> $GITHUB_OUTPUT
+          echo "✅ Successfully posted! Buffer Post ID: ${BUFFER_POST_ID}"
+      
+      - name: Mark as posted
+        if: steps.check_posted.outputs.already_posted == 'false' && steps.post_buffer.outcome == 'success'
+        run: |
+          POST_ID="${{ steps.determine_post.outputs.post_id }}"
+          mkdir -p posted
+          
+          # Record when it was posted
+          echo "$(date -u '+%Y-%m-%d %H:%M:%S UTC')" > "posted/${POST_ID}.done"
+          echo "Buffer Post ID: ${{ steps.post_buffer.outputs.buffer_post_id }}" >> "posted/${POST_ID}.done"
+          
+          # Commit the change
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add posted/
+          git commit -m "✅ Posted: ${POST_ID} at $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
+          
+          echo "📝 Marked ${POST_ID} as posted"
+      
+      - name: Summary
+        run: |
+          POST_ID="${{ steps.determine_post.outputs.post_id }}"
+          
+          echo "## 📊 Post Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Post ID | \`${POST_ID}\` |" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.check_posted.outputs.already_posted }}" == "true" ]; then
+            echo "| Status | ⚠️ Already posted (skipped) |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Status | ✅ Posted successfully |" >> $GITHUB_STEP_SUMMARY
+            echo "| Buffer Post ID | \`${{ steps.post_buffer.outputs.buffer_post_id }}\` |" >> $GITHUB_STEP_SUMMARY
+          fi
