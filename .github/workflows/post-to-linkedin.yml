@@ -96,13 +96,8 @@ jobs:
           IMAGE=$(echo "$POST_DATA" | jq -r '.image')
           TOPIC=$(echo "$POST_DATA" | jq -r '.topic')
           
-          # Get image URL via GitHub API (bypasses CDN caching issues)
-          IMAGE_URL=$(curl -s "https://api.github.com/repos/zerosight360/linkedin-images/contents/${IMAGE}" | jq -r '.download_url')
-          
-          # Fallback to raw URL if API fails
-          if [ -z "$IMAGE_URL" ] || [ "$IMAGE_URL" == "null" ]; then
-            IMAGE_URL="https://raw.githubusercontent.com/zerosight360/linkedin-images/master/${IMAGE}"
-          fi
+          # Use blob URL with raw=true (reliable, no CDN caching issues)
+          IMAGE_URL="https://github.com/zerosight360/linkedin-images/blob/master/${IMAGE}?raw=true"
           
           echo "📌 Topic: $TOPIC"
           echo "📷 Image: $IMAGE_URL"
