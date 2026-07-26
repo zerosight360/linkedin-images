@@ -5,7 +5,7 @@
       "channel_id": "6a6484dbe2638b94d7d11e86",
       "channel_name": "zerosight360 (Company)",
       "schedule": "2026-08-11 09:00 IST",
-      "image": "design_01_big_stat.png",
+      "image": "feed_01_big_stat.png",
       "topic": "Cloud Misconfig",
       "text": "65% of cloud breaches come from misconfigurations.\n\nNot sophisticated attacks. Not zero-days.\nSomeone checked \"public\" when they meant \"private.\"\n\nLast quarter we found:\n• 4 S3 buckets publicly exposing customer data\n• 7 overly permissive IAM roles (admin to interns)\n• 11 security groups allowing 0.0.0.0/0 inbound\n\nThe cloud provider gives you infinite flexibility.\nIt also gives you infinite rope.\n\nYour security tools might be expensive.\nBut are they checking what your developers actually deploy?\n\nInfrastructure security review → zerosight360.com"
     },
@@ -14,81 +14,81 @@
       "channel_id": "6a6484dbe2638b94d7d11e86",
       "channel_name": "zerosight360 (Company)",
       "schedule": "2026-08-12 09:00 IST",
-      "image": "design_02_split_panel.png",
+      "image": "feed_02_split_panel.png",
       "topic": "API Security",
-      "text": "87% of organizations experienced an API security incident last year.\n\n258 attacks per organization on average.\n$700K average cost per incident.\n5,900+ APIs per enterprise.\n\nYet most companies:\n• Don't have a complete API inventory\n• Can't detect shadow APIs\n• Have no auth standards enforcement\n• Rely solely on WAF for protection\n\nYour API count is growing faster than your team can track.\n\nShadow APIs from abandoned projects.\nPartner integrations nobody documented.\nInternal tools with admin endpoints exposed.\n\nEvery endpoint is an attack surface.\nDo you know where yours are?\n\nAPI security assessment → zerosight360.com"
+      "text": "87% of organizations experienced an API security incident last year.\n\n258 attacks per organization on average.\n$700K average cost per incident.\n5,900+ APIs per enterprise.\n\nYet most companies:\n• Don't have a complete API inventory\n• Can't detect shadow APIs\n• Have no auth standards enforcement\n• Rely solely on WAF for protection\n\nYour API count is growing faster than your team can track.\n\nEvery endpoint is an attack surface.\nDo you know where yours are?\n\nAPI security assessment → zerosight360.com"
     },
     {
       "id": "company_3",
       "channel_id": "6a6484dbe2638b94d7d11e86",
       "channel_name": "zerosight360 (Company)",
       "schedule": "2026-08-13 09:00 IST",
-      "image": "design_03_checklist.png",
+      "image": "feed_03_checklist.png",
       "topic": "Supply Chain",
-      "text": "86% of commercial codebases contain open source vulnerabilities.\n\nYou chose your framework carefully.\nBut your framework chose 911 dependencies on average.\n\nWhat's 8 levels deep in your dependency tree?\n→ Components last updated in 2019\n→ Maintainers who moved on\n→ Known CVEs nobody patched\n\nAnd supply chain attacks increased 4× since 2020.\n\nnpm audit catches direct deps.\nWhat catches level 8?\n\nYour vendors do security reviews.\nWho reviews your open source?\n\nDependency security audit → zerosight360.com"
+      "text": "86% of commercial codebases contain open source vulnerabilities.\n\nYou chose your framework carefully.\nBut your framework chose 911 dependencies on average.\n\nWhat's 8 levels deep in your dependency tree?\n→ Components last updated in 2019\n→ Maintainers who moved on\n→ Known CVEs nobody patched\n\nSupply chain attacks increased 4× since 2020.\n\nnpm audit catches direct deps.\nWhat catches level 8?\n\nDependency security audit → zerosight360.com"
     },
     {
       "id": "company_4",
       "channel_id": "6a6484dbe2638b94d7d11e86",
       "channel_name": "zerosight360 (Company)",
       "schedule": "2026-08-14 09:00 IST",
-      "image": "design_04_warning.png",
+      "image": "feed_04_warning.png",
       "topic": "Zero-Day",
-      "text": "The zero-day window just shrunk to 5 days.\n\nKEV (Known Exploited Vulnerabilities) inclusion dropped from 8.5 to 5 days.\nHighly exploitable vulnerabilities up 105% year over year.\n\nTranslation:\nFrom public disclosure to active exploitation in under a week.\n\nCan your team answer \"are we affected?\" in hours?\n\nMost can't because:\n• Asset inventory is incomplete\n• Dependencies aren't tracked\n• Vulnerability scanners run weekly\n\nThe attackers check Rapid7 too.\nThey just move faster.\n\nReal-time visibility isn't optional anymore.\n\nVulnerability response assessment → zerosight360.com"
+      "text": "The zero-day window just shrunk to 5 days.\n\nKEV inclusion dropped from 8.5 to 5 days.\nHighly exploitable vulnerabilities up 105% YoY.\n\nFrom public disclosure to active exploitation in under a week.\n\nCan your team answer \"are we affected?\" in hours?\n\nMost can't because:\n• Asset inventory is incomplete\n• Dependencies aren't tracked\n• Vulnerability scanners run weekly\n\nThe attackers check Rapid7 too.\nThey just move faster.\n\nVulnerability response assessment → zerosight360.com"
     },
     {
       "id": "company_5",
       "channel_id": "6a6484dbe2638b94d7d11e86",
       "channel_name": "zerosight360 (Company)",
       "schedule": "2026-08-15 09:00 IST",
-      "image": "design_07_thread.png",
+      "image": "feed_07_thread.png",
       "topic": "Identity Security",
-      "text": "79% of ransomware attacks start with stolen credentials.\n\nAttackers don't break in. They log in.\n\nThe anatomy of access:\n→ Password from a breach database\n→ Or phishing email (54% click rate with AI)\n→ Or session token from malware\n→ Then lateral movement via RDP\n→ Then data exfiltration\n→ Then encryption\n\nMFA helps. But MFA fatigue is real.\n(3am approve-button attacks work)\n\nService accounts are worse:\n• Created for integrations\n• Given admin rights \"temporarily\"\n• Never audited\n• Never rotated\n• Shared credentials in Slack\n\nYour perimeter isn't the firewall anymore.\nIt's every identity with access.\n\nIdentity security review → zerosight360.com"
+      "text": "79% of ransomware attacks start with stolen credentials.\n\nAttackers don't break in. They log in.\n\nThe anatomy of access:\n→ Password from a breach database\n→ Or phishing email (54% click rate with AI)\n→ Or session token from malware\n→ Then lateral movement via RDP\n→ Then encryption\n\nMFA helps. But MFA fatigue is real.\n\nService accounts are worse:\n• Given admin rights \"temporarily\"\n• Never audited, never rotated\n\nYour perimeter isn't the firewall anymore.\nIt's every identity with access.\n\nIdentity security review → zerosight360.com"
     },
     {
       "id": "personal_1",
       "channel_id": "6a6484dae2638b94d7d11e85",
       "channel_name": "nishajiths (Personal)",
       "schedule": "2026-08-11 09:30 IST",
-      "image": "design_05_quote.png",
+      "image": "feed_05_quote.png",
       "topic": "S3 Story",
-      "text": "Last month I found a client's entire customer database in a public S3 bucket.\n\nNot a sophisticated attack.\nNot a supply chain compromise.\nI just... looked.\n\nThe bucket was set to public during \"quick testing\" two years ago.\nIt was supposed to be temporary.\n\nThey had expensive security tools.\nAnnual penetration tests.\nSOC 2 Type II certification.\n\nBut this bucket was created outside the normal deployment process.\nA developer needed something fast.\nIt worked.\nThey moved on.\n\nTwo years and 200,000 customer records later, I found it in 20 minutes.\n\nThe gap isn't technology.\nIt's visibility.\n\nWhat exists outside your official infrastructure?\n\n-Nish"
+      "text": "Last month I found a client's entire customer database in a public S3 bucket.\n\nNot a sophisticated attack.\nI just... looked.\n\nThe bucket was set to public during \"quick testing\" two years ago.\nIt was supposed to be temporary.\n\nThey had expensive security tools.\nAnnual penetration tests.\nSOC 2 Type II certification.\n\nBut this bucket was created outside the normal process.\nA developer needed something fast.\nIt worked. They moved on.\n\nTwo years and 200,000 customer records later, I found it in 20 minutes.\n\nThe gap isn't technology.\nIt's visibility.\n\nWhat exists outside your official infrastructure?\n\n-Nish"
     },
     {
       "id": "personal_2",
       "channel_id": "6a6484dae2638b94d7d11e85",
       "channel_name": "nishajiths (Personal)",
       "schedule": "2026-08-12 09:30 IST",
-      "image": "design_06_comparison.png",
+      "image": "feed_06_comparison.png",
       "topic": "AI Phishing",
-      "text": "AI-crafted phishing emails have a 54% click rate.\nHuman-written ones? 12%.\n\nI tested this with a client last month.\n\nSame company.\nSame employee list.\nTwo campaigns.\n\nThe AI email was perfect:\n• Correct tone for the industry\n• No grammar mistakes\n• Referenced real internal projects\n• From a domain that looked legitimate\n\nThe old tells don't work anymore.\n\"Check for spelling errors\" is dead advice.\n\"Does it look professional?\" — yes, it does.\n\nWe're training employees on outdated threats.\n\nThe question isn't \"does this look suspicious?\"\nIt's \"was I expecting this request?\"\n\nSecurity awareness training needs a rewrite.\n\n-Nish"
+      "text": "AI-crafted phishing emails have a 54% click rate.\nHuman-written ones? 12%.\n\nI tested this with a client last month.\n\nSame company. Same employee list. Two campaigns.\n\nThe AI email was perfect:\n• Correct tone for the industry\n• No grammar mistakes\n• Referenced real internal projects\n\nThe old tells don't work anymore.\n\"Check for spelling errors\" is dead advice.\n\"Does it look professional?\" — yes, it does.\n\nThe question isn't \"does this look suspicious?\"\nIt's \"was I expecting this request?\"\n\nSecurity awareness training needs a rewrite.\n\n-Nish"
     },
     {
       "id": "personal_3",
       "channel_id": "6a6484dae2638b94d7d11e85",
       "channel_name": "nishajiths (Personal)",
       "schedule": "2026-08-13 09:30 IST",
-      "image": "design_08_case_study.png",
+      "image": "feed_08_case_study.png",
       "topic": "NPM Dependency",
-      "text": "We found 23 critical vulnerabilities in an \"approved\" npm package.\n\nClient pulled in a popular React component library.\n50K+ weekly downloads.\nMIT license.\nActive maintainer.\nAll green flags.\n\nI ran a deep dependency audit anyway.\n8 levels down in the dependency tree:\n• A package last updated in 2019\n• With 23 known CVEs\n• Including 2 critical RCEs\n\nnpm audit catches direct dependencies.\nIt does not catch level 8.\n\nThe component library maintainer didn't even know it was there.\nIt was a dependency of a dependency of a dependency.\n\n911 average components per codebase.\n86% have vulnerabilities.\n\nWho audits your audits?\n\n-Nish"
+      "text": "We found 23 critical vulnerabilities in an \"approved\" npm package.\n\nClient pulled in a popular React component library.\n50K+ weekly downloads. MIT license. Active maintainer.\nAll green flags.\n\nI ran a deep dependency audit anyway.\n8 levels down in the tree:\n• A package last updated in 2019\n• With 23 known CVEs\n• Including 2 critical RCEs\n\nnpm audit catches direct dependencies.\nIt does not catch level 8.\n\n911 average components per codebase.\n86% have vulnerabilities.\n\nWho audits your audits?\n\n-Nish"
     },
     {
       "id": "personal_4",
       "channel_id": "6a6484dae2638b94d7d11e85",
       "channel_name": "nishajiths (Personal)",
       "schedule": "2026-08-14 09:30 IST",
-      "image": "design_09_process_flow.png",
+      "image": "feed_09_process_flow.png",
       "topic": "Zero-Day Response",
-      "text": "A client called me at 11pm last week.\n\n\"We just saw the CVE. Are we affected?\"\n\nThey weren't sure.\nTheir asset inventory was a spreadsheet from 6 months ago.\nTheir dependency list was \"whatever's in package.json\" (direct deps only).\nTheir infrastructure had grown 40% since last audit.\n\nWe spent 4 hours answering a question that should take 4 minutes.\n\nThe zero-day window is now 5 days.\nFrom public disclosure to active exploitation.\n\nYou don't have time to figure out what you have when the CVE drops.\nYou need to know before.\n\nWhat would happen if a critical CVE dropped in your stack tonight?\n\nCould you answer \"are we affected?\" before coffee?\n\n-Nish"
+      "text": "A client called me at 11pm last week.\n\n\"We just saw the CVE. Are we affected?\"\n\nThey weren't sure.\nTheir asset inventory was a spreadsheet from 6 months ago.\nTheir dependency list was \"whatever's in package.json\" (direct deps only).\n\nWe spent 4 hours answering a question that should take 4 minutes.\n\nThe zero-day window is now 5 days.\n\nYou don't have time to figure out what you have when the CVE drops.\nYou need to know before.\n\nCould you answer \"are we affected?\" before coffee?\n\n-Nish"
     },
     {
       "id": "personal_5",
       "channel_id": "6a6484dae2638b94d7d11e85",
       "channel_name": "nishajiths (Personal)",
       "schedule": "2026-08-15 09:30 IST",
-      "image": "design_10_field_note.png",
+      "image": "feed_10_field_note.png",
       "topic": "AI Code Security",
-      "text": "25.7% of AI-generated code contains security vulnerabilities.\n\nI reviewed a codebase last month.\n50% of it was written by Copilot.\nThe developer was honest about it.\n\nThe AI was efficient:\n• Clean structure\n• Good variable names\n• Fast to implement\n\nThe AI was also dangerous:\n• SQL concatenation instead of parameterized queries\n• User input passed directly to shell commands\n• JWT tokens stored in localStorage\n• CORS set to wildcard\n\nThe developer trusted the suggestions.\nThe suggestions came from training data.\nThe training data included insecure code.\n\nAI makes you code faster.\nIt doesn't make you code safer.\n\nHuman review is now more important, not less.\n\n-Nish"
+      "text": "25.7% of AI-generated code contains security vulnerabilities.\n\nI reviewed a codebase last month.\n50% was written by Copilot.\n\nThe AI was efficient:\n• Clean structure\n• Good variable names\n• Fast to implement\n\nThe AI was also dangerous:\n• SQL concatenation instead of parameterized queries\n• User input passed directly to shell commands\n• JWT tokens stored in localStorage\n• CORS set to wildcard\n\nThe training data included insecure code.\n\nAI makes you code faster.\nIt doesn't make you code safer.\n\nHuman review is now more important, not less.\n\n-Nish"
     }
   ]
 }
