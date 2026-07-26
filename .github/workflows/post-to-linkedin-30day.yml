@@ -151,8 +151,8 @@ jobs:
           IMAGE=$(echo "$POST_DATA" | jq -r '.image')
           TOPIC=$(echo "$POST_DATA" | jq -r '.topic')
           
-          # Use blob URL with raw=true (reliable)
-          IMAGE_URL="https://github.com/zerosight360/linkedin-images/blob/master/${IMAGE}?raw=true"
+          # Get download URL via GitHub API (most reliable)
+          IMAGE_URL=$(curl -s "https://api.github.com/repos/zerosight360/linkedin-images/contents/${IMAGE}" | jq -r '.download_url')
           
           echo "📌 Topic: $TOPIC"
           echo "📷 Image: $IMAGE_URL"
