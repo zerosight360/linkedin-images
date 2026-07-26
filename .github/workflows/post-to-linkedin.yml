@@ -1,0 +1,112 @@
+name: Post to LinkedIn via Buffer
+
+on:
+  schedule:
+    # Week 2 Company Posts - Aug 11-15, 2026 @ 9:00 AM IST (3:30 UTC)
+    - cron: '30 3 11 8 *'  # Aug 11 - Cloud Misconfig
+    - cron: '30 3 12 8 *'  # Aug 12 - API Security
+    - cron: '30 3 13 8 *'  # Aug 13 - Supply Chain
+    - cron: '30 3 14 8 *'  # Aug 14 - Zero-Day
+    - cron: '30 3 15 8 *'  # Aug 15 - Identity Security
+    
+    # Week 2 Personal Posts - Aug 11-15, 2026 @ 9:30 AM IST (4:00 UTC)
+    - cron: '0 4 11 8 *'   # Aug 11 - S3 Story
+    - cron: '0 4 12 8 *'   # Aug 12 - AI Phishing
+    - cron: '0 4 13 8 *'   # Aug 13 - NPM Dependency
+    - cron: '0 4 14 8 *'   # Aug 14 - Zero-Day Response
+    - cron: '0 4 15 8 *'   # Aug 15 - AI Code Security
+  
+  workflow_dispatch:
+    inputs:
+      post_id:
+        description: 'Post ID to publish (e.g., company_1, personal_3)'
+        required: true
+        type: string
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Determine which post to publish
+        id: determine_post
+        run: |
+          if [ -n "${{ github.event.inputs.post_id }}" ]; then
+            POST_ID="${{ github.event.inputs.post_id }}"
+          else
+            # Determine based on cron schedule (date and time)
+            DAY=$(date -u +%d)
+            HOUR=$(date -u +%H)
+            
+            # Map day to post number (11->1, 12->2, etc.)
+            POST_NUM=$((DAY - 10))
+            
+            # Determine channel based on time (3:30 = company, 4:00 = personal)
+            if [ "$HOUR" -eq 3 ]; then
+              POST_ID="company_${POST_NUM}"
+            else
+              POST_ID="personal_${POST_NUM}"
+            fi
+          fi
+          
+          echo "post_id=${POST_ID}" >> $GITHUB_OUTPUT
+          echo "Publishing post: ${POST_ID}"
+      
+      - name: Post to Buffer
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: |
+          POST_ID="${{ steps.determine_post.outputs.post_id }}"
+          
+          # Load post data from JSON file
+          POST_DATA=$(cat posts/posts.json | jq -r ".posts[] | select(.id == \"${POST_ID}\")")
+          
+          if [ -z "$POST_DATA" ]; then
+            echo "Error: Post ${POST_ID} not found in posts.json"
+            exit 1
+          fi
+          
+          CHANNEL_ID=$(echo "$POST_DATA" | jq -r '.channel_id')
+          TEXT=$(echo "$POST_DATA" | jq -r '.text')
+          IMAGE=$(echo "$POST_DATA" | jq -r '.image')
+          IMAGE_URL="https://raw.githubusercontent.com/zerosight360/linkedin-images/master/${IMAGE}"
+          
+          echo "Channel: $CHANNEL_ID"
+          echo "Image: $IMAGE_URL"
+          echo "Text preview: ${TEXT:0:100}..."
+          
+          # Post to Buffer using shareNow (immediate publish)
+          RESPONSE=$(curl -s -X POST https://api.buffer.com/graphql \
+            -H "Authorization: Bearer ${BUFFER_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"query\": \"mutation CreatePost(\$input: CreatePostInput!) { createPost(input: \$input) { ... on PostActionSuccess { post { id status } } ... on MutationError { message } } }\",
+              \"variables\": {
+                \"input\": {
+                  \"channelId\": \"${CHANNEL_ID}\",
+                  \"text\": $(echo "$TEXT" | jq -Rs .),
+                  \"mode\": \"shareNow\",
+                  \"schedulingType\": \"automatic\",
+                  \"assets\": [{\"image\": {\"url\": \"${IMAGE_URL}\"}}]
+                }
+              }
+            }")
+          
+          echo "Buffer API Response:"
+          echo "$RESPONSE" | jq .
+          
+          # Check for errors
+          if echo "$RESPONSE" | jq -e '.errors' > /dev/null 2>&1; then
+            echo "Error posting to Buffer"
+            exit 1
+          fi
+          
+          if echo "$RESPONSE" | jq -e '.data.createPost.message' > /dev/null 2>&1; then
+            echo "Buffer error: $(echo "$RESPONSE" | jq -r '.data.createPost.message')"
+            exit 1
+          fi
+          
+          echo "✅ Successfully posted to LinkedIn!"
