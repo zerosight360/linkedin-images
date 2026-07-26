@@ -1,0 +1,210 @@
+name: Post to LinkedIn - 30 Day Campaign
+
+on:
+  schedule:
+    # Week 1: Aug 16-22, 2026
+    - cron: '30 4 16 8 *'   # Aug 16 Sat 10:00 IST - Personal
+    - cron: '30 3 18 8 *'   # Aug 18 Mon 09:00 IST - Company
+    - cron: '0 4 19 8 *'    # Aug 19 Tue 09:30 IST - Personal
+    - cron: '30 3 20 8 *'   # Aug 20 Wed 09:00 IST - Company
+    - cron: '0 4 21 8 *'    # Aug 21 Thu 09:30 IST - Personal
+    - cron: '30 3 22 8 *'   # Aug 22 Fri 09:00 IST - Company
+    
+    # Week 2: Aug 23-29, 2026
+    - cron: '30 4 23 8 *'   # Aug 23 Sat 10:00 IST - Personal
+    - cron: '30 3 25 8 *'   # Aug 25 Mon 09:00 IST - Company
+    - cron: '0 4 26 8 *'    # Aug 26 Tue 09:30 IST - Personal
+    - cron: '30 3 27 8 *'   # Aug 27 Wed 09:00 IST - Company
+    - cron: '0 4 28 8 *'    # Aug 28 Thu 09:30 IST - Personal
+    - cron: '30 3 29 8 *'   # Aug 29 Fri 09:00 IST - Company
+    
+    # Week 3: Aug 30 - Sep 5, 2026
+    - cron: '30 4 30 8 *'   # Aug 30 Sat 10:00 IST - Personal
+    - cron: '30 3 1 9 *'    # Sep 01 Mon 09:00 IST - Company
+    - cron: '0 4 2 9 *'     # Sep 02 Tue 09:30 IST - Personal
+    - cron: '30 3 3 9 *'    # Sep 03 Wed 09:00 IST - Company
+    - cron: '0 4 4 9 *'     # Sep 04 Thu 09:30 IST - Personal
+    - cron: '30 3 5 9 *'    # Sep 05 Fri 09:00 IST - Company
+    
+    # Week 4: Sep 6-12, 2026
+    - cron: '30 4 6 9 *'    # Sep 06 Sat 10:00 IST - Personal
+    - cron: '30 4 7 9 *'    # Sep 07 Sun 10:00 IST - Personal (bonus)
+    - cron: '30 3 8 9 *'    # Sep 08 Mon 09:00 IST - Company
+    - cron: '0 4 9 9 *'     # Sep 09 Tue 09:30 IST - Personal
+    - cron: '30 3 10 9 *'   # Sep 10 Wed 09:00 IST - Company
+    - cron: '0 4 11 9 *'    # Sep 11 Thu 09:30 IST - Personal
+    - cron: '30 3 12 9 *'   # Sep 12 Fri 09:00 IST - Company
+    
+    # Week 5: Sep 13-17, 2026
+    - cron: '30 4 13 9 *'   # Sep 13 Sat 10:00 IST - Personal
+    - cron: '30 4 14 9 *'   # Sep 14 Sun 10:00 IST - Company
+    - cron: '30 3 15 9 *'   # Sep 15 Mon 09:00 IST - Company
+    - cron: '0 4 16 9 *'    # Sep 16 Tue 09:30 IST - Personal
+    - cron: '30 3 17 9 *'   # Sep 17 Wed 09:00 IST - Company
+  
+  workflow_dispatch:
+    inputs:
+      post_id:
+        description: 'Post ID to publish (e.g., day01_personal, day15_company)'
+        required: true
+        type: string
+      force:
+        description: 'Force post even if already posted'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Determine which post to publish
+        id: determine_post
+        run: |
+          if [ -n "${{ github.event.inputs.post_id }}" ]; then
+            POST_ID="${{ github.event.inputs.post_id }}"
+          else
+            # Map cron schedule to post ID
+            MONTH=$(date -u +%m)
+            DAY=$(date -u +%d)
+            HOUR=$(date -u +%H)
+            MIN=$(date -u +%M)
+            
+            # Create lookup based on schedule
+            case "${MONTH}-${DAY}-${HOUR}:${MIN}" in
+              "08-16-04:30") POST_ID="day01_personal" ;;
+              "08-18-03:30") POST_ID="day02_company" ;;
+              "08-19-04:00") POST_ID="day03_personal" ;;
+              "08-20-03:30") POST_ID="day04_company" ;;
+              "08-21-04:00") POST_ID="day05_personal" ;;
+              "08-22-03:30") POST_ID="day06_company" ;;
+              "08-23-04:30") POST_ID="day07_personal" ;;
+              "08-25-03:30") POST_ID="day08_company" ;;
+              "08-26-04:00") POST_ID="day09_personal" ;;
+              "08-27-03:30") POST_ID="day10_company" ;;
+              "08-28-04:00") POST_ID="day11_personal" ;;
+              "08-29-03:30") POST_ID="day12_company" ;;
+              "08-30-04:30") POST_ID="day13_personal" ;;
+              "09-01-03:30") POST_ID="day14_company" ;;
+              "09-02-04:00") POST_ID="day15_personal" ;;
+              "09-03-03:30") POST_ID="day16_company" ;;
+              "09-04-04:00") POST_ID="day17_personal" ;;
+              "09-05-03:30") POST_ID="day18_company" ;;
+              "09-06-04:30") POST_ID="day19_personal" ;;
+              "09-07-04:30") POST_ID="day27_personal" ;;
+              "09-08-03:30") POST_ID="day20_company" ;;
+              "09-09-04:00") POST_ID="day21_personal" ;;
+              "09-10-03:30") POST_ID="day22_company" ;;
+              "09-11-04:00") POST_ID="day23_personal" ;;
+              "09-12-03:30") POST_ID="day24_company" ;;
+              "09-13-04:30") POST_ID="day25_personal" ;;
+              "09-14-04:30") POST_ID="day26_company" ;;
+              "09-15-03:30") POST_ID="day28_company" ;;
+              "09-16-04:00") POST_ID="day29_personal" ;;
+              "09-17-03:30") POST_ID="day30_company" ;;
+              *) 
+                echo "❌ Unknown schedule: ${MONTH}-${DAY}-${HOUR}:${MIN}"
+                exit 1
+                ;;
+            esac
+          fi
+          
+          echo "post_id=${POST_ID}" >> $GITHUB_OUTPUT
+          echo "📝 Post ID: ${POST_ID}"
+      
+      - name: Check if already posted
+        id: check_posted
+        run: |
+          POST_ID="${{ steps.determine_post.outputs.post_id }}"
+          POSTED_FILE="posted/${POST_ID}.done"
+          
+          if [ -f "$POSTED_FILE" ] && [ "${{ github.event.inputs.force }}" != "true" ]; then
+            echo "⚠️ Post ${POST_ID} was already published on $(cat $POSTED_FILE)"
+            echo "already_posted=true" >> $GITHUB_OUTPUT
+          else
+            echo "✅ Post ${POST_ID} ready to publish"
+            echo "already_posted=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Post to Buffer
+        if: steps.check_posted.outputs.already_posted == 'false'
+        id: post_buffer
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: |
+          POST_ID="${{ steps.determine_post.outputs.post_id }}"
+          
+          # Load post data from 30-day JSON
+          POST_DATA=$(cat posts/posts_30day.json | jq -r ".posts[] | select(.id == \"${POST_ID}\")")
+          
+          if [ -z "$POST_DATA" ] || [ "$POST_DATA" == "null" ]; then
+            echo "❌ Error: Post ${POST_ID} not found in posts_30day.json"
+            exit 1
+          fi
+          
+          CHANNEL_ID=$(echo "$POST_DATA" | jq -r '.channel_id')
+          TEXT=$(echo "$POST_DATA" | jq -r '.text')
+          IMAGE=$(echo "$POST_DATA" | jq -r '.image')
+          TOPIC=$(echo "$POST_DATA" | jq -r '.topic')
+          
+          # Use blob URL with raw=true (reliable)
+          IMAGE_URL="https://github.com/zerosight360/linkedin-images/blob/master/${IMAGE}?raw=true"
+          
+          echo "📌 Topic: $TOPIC"
+          echo "📷 Image: $IMAGE_URL"
+          echo "📝 Text preview: ${TEXT:0:100}..."
+          
+          # Post to Buffer
+          RESPONSE=$(curl -s -X POST https://api.buffer.com/graphql \
+            -H "Authorization: Bearer ${BUFFER_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"query\": \"mutation CreatePost(\$input: CreatePostInput!) { createPost(input: \$input) { ... on PostActionSuccess { post { id status } } ... on MutationError { message } } }\",
+              \"variables\": {
+                \"input\": {
+                  \"channelId\": \"${CHANNEL_ID}\",
+                  \"text\": $(echo "$TEXT" | jq -Rs .),
+                  \"mode\": \"shareNow\",
+                  \"schedulingType\": \"automatic\",
+                  \"assets\": [{\"image\": {\"url\": \"${IMAGE_URL}\"}}]
+                }
+              }
+            }")
+          
+          echo "📡 Buffer API Response:"
+          echo "$RESPONSE" | jq .
+          
+          # Check for errors
+          if echo "$RESPONSE" | jq -e '.errors' > /dev/null 2>&1; then
+            echo "❌ Error posting to Buffer"
+            exit 1
+          fi
+          
+          if echo "$RESPONSE" | jq -e '.data.createPost.message' > /dev/null 2>&1; then
+            ERROR_MSG=$(echo "$RESPONSE" | jq -r '.data.createPost.message')
+            echo "❌ Buffer error: $ERROR_MSG"
+            exit 1
+          fi
+          
+          BUFFER_POST_ID=$(echo "$RESPONSE" | jq -r '.data.createPost.post.id // empty')
+          echo "buffer_post_id=${BUFFER_POST_ID}" >> $GITHUB_OUTPUT
+          echo "✅ Successfully posted! Buffer Post ID: ${BUFFER_POST_ID}"
+      
+      - name: Mark as posted
+        if: steps.check_posted.outputs.already_posted == 'false' && steps.post_buffer.outcome == 'success'
+        run: |
+          POST_ID="${{ steps.determine_post.outputs.post_id }}"
+          mkdir -p posted
+          
+          echo "$(date -u '+%Y-%m-%d %H:%M:%S UTC')" > "posted/${POST_ID}.done"
+          echo "Buffer Post ID: ${{ steps.post_buffer.outputs.buffer_post_id }}" >> "posted/${POST_ID}.done"
+          
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add posted/
+          git commit -m "✅ Posted: ${POST_ID}"
+          git push
