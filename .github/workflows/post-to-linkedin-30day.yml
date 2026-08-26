@@ -69,45 +69,44 @@ jobs:
             POST_ID="${{ github.event.inputs.post_id }}"
           else
             # Map cron schedule to post ID
+            # Note: Using only date (not time) because GitHub Actions cron can have delays
             MONTH=$(date -u +%m)
             DAY=$(date -u +%d)
-            HOUR=$(date -u +%H)
-            MIN=$(date -u +%M)
             
-            # Create lookup based on schedule
-            case "${MONTH}-${DAY}-${HOUR}:${MIN}" in
-              "08-16-04:30") POST_ID="day01_personal" ;;
-              "08-18-03:30") POST_ID="day02_company" ;;
-              "08-19-04:00") POST_ID="day03_personal" ;;
-              "08-20-03:30") POST_ID="day04_company" ;;
-              "08-21-04:00") POST_ID="day05_personal" ;;
-              "08-22-03:30") POST_ID="day06_company" ;;
-              "08-23-04:30") POST_ID="day07_personal" ;;
-              "08-25-03:30") POST_ID="day08_company" ;;
-              "08-26-04:00") POST_ID="day09_personal" ;;
-              "08-27-03:30") POST_ID="day10_company" ;;
-              "08-28-04:00") POST_ID="day11_personal" ;;
-              "08-29-03:30") POST_ID="day12_company" ;;
-              "08-30-04:30") POST_ID="day13_personal" ;;
-              "09-01-03:30") POST_ID="day14_company" ;;
-              "09-02-04:00") POST_ID="day15_personal" ;;
-              "09-03-03:30") POST_ID="day16_company" ;;
-              "09-04-04:00") POST_ID="day17_personal" ;;
-              "09-05-03:30") POST_ID="day18_company" ;;
-              "09-06-04:30") POST_ID="day19_personal" ;;
-              "09-07-04:30") POST_ID="day27_personal" ;;
-              "09-08-03:30") POST_ID="day20_company" ;;
-              "09-09-04:00") POST_ID="day21_personal" ;;
-              "09-10-03:30") POST_ID="day22_company" ;;
-              "09-11-04:00") POST_ID="day23_personal" ;;
-              "09-12-03:30") POST_ID="day24_company" ;;
-              "09-13-04:30") POST_ID="day25_personal" ;;
-              "09-14-04:30") POST_ID="day26_company" ;;
-              "09-15-03:30") POST_ID="day28_company" ;;
-              "09-16-04:00") POST_ID="day29_personal" ;;
-              "09-17-03:30") POST_ID="day30_company" ;;
+            # Create lookup based on date only (each date has one scheduled post)
+            case "${MONTH}-${DAY}" in
+              "08-16") POST_ID="day01_personal" ;;
+              "08-18") POST_ID="day02_company" ;;
+              "08-19") POST_ID="day03_personal" ;;
+              "08-20") POST_ID="day04_company" ;;
+              "08-21") POST_ID="day05_personal" ;;
+              "08-22") POST_ID="day06_company" ;;
+              "08-23") POST_ID="day07_personal" ;;
+              "08-25") POST_ID="day08_company" ;;
+              "08-26") POST_ID="day09_personal" ;;
+              "08-27") POST_ID="day10_company" ;;
+              "08-28") POST_ID="day11_personal" ;;
+              "08-29") POST_ID="day12_company" ;;
+              "08-30") POST_ID="day13_personal" ;;
+              "09-01") POST_ID="day14_company" ;;
+              "09-02") POST_ID="day15_personal" ;;
+              "09-03") POST_ID="day16_company" ;;
+              "09-04") POST_ID="day17_personal" ;;
+              "09-05") POST_ID="day18_company" ;;
+              "09-06") POST_ID="day19_personal" ;;
+              "09-07") POST_ID="day27_personal" ;;
+              "09-08") POST_ID="day20_company" ;;
+              "09-09") POST_ID="day21_personal" ;;
+              "09-10") POST_ID="day22_company" ;;
+              "09-11") POST_ID="day23_personal" ;;
+              "09-12") POST_ID="day24_company" ;;
+              "09-13") POST_ID="day25_personal" ;;
+              "09-14") POST_ID="day26_company" ;;
+              "09-15") POST_ID="day28_company" ;;
+              "09-16") POST_ID="day29_personal" ;;
+              "09-17") POST_ID="day30_company" ;;
               *) 
-                echo "❌ Unknown schedule: ${MONTH}-${DAY}-${HOUR}:${MIN}"
+                echo "❌ Unknown schedule date: ${MONTH}-${DAY}"
                 exit 1
                 ;;
             esac
